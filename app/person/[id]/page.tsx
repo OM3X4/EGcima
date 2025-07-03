@@ -1,5 +1,4 @@
 export const dynamic = 'force-dynamic';
-
 import React from 'react'
 import { departmentFormatter, getImageUrl } from '@/app/utils/utils'
 import ArabicDate from '@/app/components/ArabicDate'
