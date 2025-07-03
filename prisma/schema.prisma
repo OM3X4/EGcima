@@ -95,6 +95,7 @@ model Platform {
   id            Int             @id(map: "Platforms_pkey") @default(autoincrement())
   name          String?
   poster_path   String?
+  link          String?
   ProviderMovie ProviderMovie[]
 }
 

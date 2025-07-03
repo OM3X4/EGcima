@@ -8,17 +8,14 @@ export async function GET(
 ) {
 
     try {
-        const LatestMovies = await prisma.movie.findMany({
+        const LatestTv = await prisma.movie.findMany({
             where: {
                 release_date: {
                     not: null,
                     lte: new Date()
                 },
                 type: {
-                    equals: "movie"
-                },
-                runtime: {
-                    gte: 45
+                    equals: "tv"
                 },
                 poster_path: {
                     not: null
@@ -30,7 +27,7 @@ export async function GET(
             take: 5
         })
 
-        return NextResponse.json({ LatestMovies });
+        return NextResponse.json({ LatestTv });
     } catch {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }

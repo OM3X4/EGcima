@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import {NextRequest ,  NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 
@@ -8,7 +8,7 @@ export async function GET(
 ) {
 
     try {
-        const LatestMovies = await prisma.movie.findMany({
+        const highestRevenue = await prisma.movie.findMany({
             where: {
                 release_date: {
                     not: null,
@@ -17,20 +17,17 @@ export async function GET(
                 type: {
                     equals: "movie"
                 },
-                runtime: {
-                    gte: 45
-                },
                 poster_path: {
                     not: null
                 }
             },
             orderBy: {
-                release_date: "desc"
+                revenue: "desc"
             },
-            take: 5
+            take: 3
         })
 
-        return NextResponse.json({ LatestMovies });
+        return NextResponse.json({ highestRevenue });
     } catch {
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }

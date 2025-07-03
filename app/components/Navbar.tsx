@@ -5,7 +5,7 @@ import { RiAiGenerate2 } from "react-icons/ri";
 const Navbar = () => {
 
     return (
-        <div dir='ltr' className='flex items-center justify-center flex-row-reverse gap-8
+        <div dir='ltr' className='flex items-center justify-center flex-row-reverse gap-8 absolute left-1/2 -translate-x-1/2 top-0 z-50
                         bg-soft-background w-[75vw] mx-auto my-5 rounded-full h-17 px-10'>
             <h1 className='text-text text-3xl font-bold'>سينما</h1>
             {/* Search */}
