@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 
-export async function GET(_req: NextRequest, context: any) {
-    const { params } = context as { params: { id: string } };
-    const id = params.id;
+export async function GET(_req: NextRequest, { params }: any) {
+    const { id: idString } = await params;
+    const id = Number(await idString)
+
+    if(isNaN(id)){
+        console.log(idString)
+        return new NextResponse("Invalid id", {status: 400})
+    }
+
     try {
         const actor = await prisma.actor.findUnique({
             where: {

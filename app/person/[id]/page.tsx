@@ -4,6 +4,9 @@ import { departmentFormatter, getImageUrl } from '@/app/utils/utils'
 import ArabicDate from '@/app/components/ArabicDate'
 import HomePageMovie from '@/app/components/HomePageMovie';
 import type { Movie, MovieActor } from '@prisma/client';
+import { uniqueBy } from '@/app/utils/utils';
+
+
 
 type MovieActorWithRelations = MovieActor & {
     Movie: Movie;
@@ -15,19 +18,28 @@ type MovieActorWithRelations = MovieActor & {
     };
 };
 
+type PageProps = {
+    params: {
+        id: string;
+    };
+};
 
-
-async function page({ params }: { params: any }) {
-
+async function Page({ params } : { params: Promise<{ id: string }>}) {
+    const { id } = await params;
 
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-    const { actor } = await fetch(`${baseUrl}/api/person/${params.id}`).then(res => res.json());
+    const { actor } = await fetch(`${baseUrl}/api/person/${id}`).then(res => res.json());
+    const { results, actors, movies } = await fetch(`${baseUrl}/api/search/الحريفة`).then(res => res.json());
+
+    // console.log(results)
+    console.log(actors)
+    console.log(movies)
+
+    const sortedMovies = actor.MovieActor.sort((a: { order: number }, b: { order: number }) => a.order - b.order);
+    const backdropMovie = sortedMovies.filter((movieactor: MovieActorWithRelations) => movieactor.Movie.backdrop_path != null && (actor.department !== "Acting" || (movieactor.order as number) > -1))[0].Movie;
 
 
-    const backdropMovie = actor.MovieActor.sort((a: { order: number }, b: { order: number }) => a.order - b.order).filter((movie: MovieActorWithRelations) => movie.Movie.backdrop_path != null && (actor.department !== "Acting" || (movie.order as number) > -1))[0].Movie;
-    console.log(backdropMovie)
-
-
+    // return <h1 className='text-9xl text-text'>{id}</h1>
 
     return (
         <div>
@@ -71,7 +83,7 @@ async function page({ params }: { params: any }) {
                 </div>
                 <div className='w-[81%] mx-auto grid grid-cols-5 gap-10 mt-20'>
                     {
-                        actor.MovieActor
+                        uniqueBy<MovieActorWithRelations>(actor.MovieActor, "movieId")
                             .sort((a: MovieActorWithRelations, b: MovieActorWithRelations) => {
                                 const aInvalid = (a.order as number) < 0;
                                 const bInvalid = (b.order as number) < 0;
@@ -88,7 +100,7 @@ async function page({ params }: { params: any }) {
 
                                 return (a.order as number) - (b.order as number);
                             })
-                            .map(({ Movie } : { Movie: Movie}) => (
+                            .map(({ Movie }: { Movie: Movie }) => (
                                 <HomePageMovie key={Movie.id} movie={Movie} />
                             ))
                     }
@@ -99,4 +111,4 @@ async function page({ params }: { params: any }) {
     )
 }
 
-export default page
+export default Page

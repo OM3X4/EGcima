@@ -41,16 +41,14 @@ type FullGenreMovie = Prisma.GenreMovieGetPayload<{
     };
 }>;
 
-type props = {
-    params: { id: string }
-}
 
-const page = async ({ params }: { params: any}) => {
+const page = async ({ params }: { params: Promise<{ id: string }>}) => {
+
+    const { id } = await params
 
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-    const { movie }: { movie: FullMovie } = await fetch(`${baseUrl}/api/movie/${params.id}`).then(res => res.json());
+    const { movie }: { movie: FullMovie } = await fetch(`${baseUrl}/api/movie/${id}`).then(res => res.json());
 
-    console.log(movie)
 
     return (
         <div className="w-screen mb-100">

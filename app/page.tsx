@@ -26,7 +26,6 @@ async function Page() {
 	const { LatestTv } = await fetch(`${baseUrl}/api/latesttv`).then(res => res.json());
 	const { highestRevenue } = await fetch(`${baseUrl}/api/greatestrevenue`).then(res => res.json());
 	const { actors } = await fetch(`${baseUrl}/api/landingactors`).then(res => res.json());
-	console.log(actors)
 
 
 	return (
