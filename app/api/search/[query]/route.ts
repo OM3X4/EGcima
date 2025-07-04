@@ -58,6 +58,45 @@ export async function GET(
                 id: {
                     in: (results as any).filter((result: any) => result.type === 'movie').map((result: any) => result.id)
                 }
+            },
+            include: {
+                GenreMovie: {
+                    include: {
+                        Genre: true
+                    }
+                },
+                MovieActor: {
+                    include: {
+                        Actor: {
+                            include: {
+                                MovieActor: {
+                                    include: {
+                                        Movie: {
+                                            include: {
+                                                MovieActor: {
+                                                    include: {
+                                                        Actor: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                ProviderMovie: {
+                    include: {
+                        Platform: true
+                    }
+                },
+                CompanyMovie: {
+                    include: {
+                        ProductionCompany: true
+                    }
+                },
+                Image: true
             }
         })
         const actors = await prisma.actor.findMany({

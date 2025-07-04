@@ -7,7 +7,6 @@ export async function GET(_req: NextRequest, { params }: any) {
     const id = Number(await idString)
 
     if(isNaN(id)){
-        console.log(idString)
         return new NextResponse("Invalid id", {status: 400})
     }
 
